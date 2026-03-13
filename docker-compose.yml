@@ -1,0 +1,23 @@
+services:
+  osint:
+    build: .
+    container_name: osint-linkedin
+    env_file:
+      - .env
+    environment:
+      - SELENIUM_REMOTE_URL=http://selenium:4444/wd/hub
+    volumes:
+      - ./:/app
+    ports:
+      - "7860:7860"
+    depends_on:
+      - selenium
+    command: ["python", "linkedin_tool.py", "chat", "--host", "0.0.0.0", "--port", "7860"]
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: osint-selenium
+    shm_size: 2gb
+    ports:
+      - "4444:4444"
+      - "7900:7900"
